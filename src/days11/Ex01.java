@@ -8,6 +8,7 @@ public class Ex01 {
 		System.out.println("test1234");
 		System.out.println("test1234");
 		System.out.println("commit test");
+		System.out.println("집에서 테스트해보기");
 		
 	} // main
 
