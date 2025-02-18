@@ -32,6 +32,7 @@ public class Ex08 {
 		 0x300
 		*/
 		dispM(m);
+		//test
 		
 	} // main
 
