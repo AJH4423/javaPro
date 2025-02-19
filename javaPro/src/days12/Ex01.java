@@ -84,7 +84,7 @@ public class Ex01 {
 
 			}
 
-		} // 나중에 고치기
+		} 
 
 		//학생정보출력
 		System.out.printf("입력받은 학생수: %d명\n",cnt );
