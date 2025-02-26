@@ -10,6 +10,9 @@ public class Student {
 	public int kor,eng,mat,tot,rank,wrank;
 	public double avg;	
 	
+	//메소드
+	
+	
 	// 학생 정보 출력 메서드
 	public String getInfo() {
 		return String.format("[%d]\t%s\t%d\t%d\t%d\t%d\t%.2f\t%d\t%d\n"
@@ -17,6 +20,12 @@ public class Student {
 	               , name
 	               , kor, eng, mat, tot
 	               , avg, rank,wrank);
+	}
+
+	@Override
+	public String toString() {
+		return "Student [no=" + no + ", name=" + name + ", kor=" + kor + ", eng=" + eng + ", mat=" + mat + ", tot="
+				+ tot + ", rank=" + rank + ", wrank=" + wrank + ", avg=" + avg + "]";
 	}
 	
 }
