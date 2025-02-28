@@ -66,7 +66,7 @@ public class Ex06 {
 		 if(todayYear == year && todayMonth == month && todayDay == day) {
 			 return true;
 		 }else {
-			 return false;
+			 return false; 
 		 }
 	 }
 
