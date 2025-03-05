@@ -29,7 +29,7 @@ public class Ex10 {
 		list.add("서재웅");
 		list.add("김승효");
 		list.add("김도훈"); // 중복을 허용한다
-		System.out.println(list.size()); // 5
+		System.out.println(list.size()); // 6
 		System.out.println(list.isEmpty()); // false, 비어있지 않음
 		
 		// 입력한대로 순서가 유지됨
@@ -44,11 +44,11 @@ public class Ex10 {
 		
 		// int index = list.indexOf("홍길동"); // 앞에서부터 찾음
 		int index = list.lastIndexOf("홍길동"); // 뒤에서부터 찾음
-		System.out.println(index);
+		System.out.println(index); // -1
 		
 		// [문제] "김도훈" 요소를 찾아서 있으면 삭제
-//		list.remove(list.indexOf("김도훈"));
-//		System.out.println(list);
+		list.remove(list.indexOf("김도훈"));
+		System.out.println(list);
 		// boolean list.contains("김도훈");
 		/*
 		if (list.contains("김도훈")) {
