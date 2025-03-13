@@ -23,6 +23,7 @@ class Player {
 	}
 }
 
+
 // Team 클래스 정의
 class Team {
 	private ArrayList<Player> players;
@@ -77,7 +78,7 @@ class Game {
 		// 세트 점수를 3점 먼저 얻은 팀이 최종 승리
 		while (team1SetScore < 3 && team2SetScore < 3) {
 			// 게임 점수를 얻을 때까지 반복
-			while (team1GameScore < 6 && team2GameScore < 6) {
+			while (team1GameScore < 7 && team2GameScore < 7) {
 				// 포인트 점수
 				while (team1PointScore < 4 && team2PointScore < 4) { // 포인트 듀스는 아직 구현 안함
 					int pointWinner = rnd.nextInt(2) + 1;  // 1 또는 2가 랜덤으로 나옴
@@ -99,43 +100,62 @@ class Game {
 					team2GameScore++;  // 팀2가 게임 점수 획득
 					System.out.println("팀2 게임 승리! 게임 점수: " + team1GameScore + " - " + team2GameScore);
 				}
-
+				
+				// 듀스 처리
+				if (team1GameScore == 5 && team2GameScore == 5) {
+					System.out.println("듀스 상태입니다.");
+				} 
+				
+				// 듀스 상태에서 어드밴티지 처리
+				if (team1GameScore == 6 && team2GameScore == 5) {
+					System.out.println("팀1이 어드밴티지!");
+					team1PointScore = 0;
+					team2PointScore = 0;
+					continue;
+				} else if (team2GameScore == 6 && team1GameScore == 5) {
+					System.out.println("팀2가 어드밴티지!");
+					team1PointScore = 0;
+					team2PointScore = 0;
+					continue;
+				} else if(team1GameScore == 7 && team2GameScore == 5) {
+					team1SetScore++;  // 팀1이 세트 점수 1점 획득
+					System.out.println("팀1이 세트 승리! 세트 점수: " + team1SetScore + " - " + team2SetScore);
+					// 포인트 점수 초기화
+					team1PointScore = 0;
+					team2PointScore = 0;
+					break;
+				} else if(team2GameScore == 7 && team1GameScore == 5) {
+					team2SetScore++;  // 팀2이 세트 점수 1점 획득
+					System.out.println("팀2이 세트 승리! 세트 점수: " + team1SetScore + " - " + team2SetScore);
+					// 포인트 점수 초기화
+					team1PointScore = 0;
+					team2PointScore = 0;
+					break;
+				} 
+				
+				// 게임 점수 처리 (각 팀은 게임 점수 6점 먼저 달성해야 함)
+				if (team1GameScore == 6 && team2GameScore == 6) {
+					// 타이브레이크 시작 -> 구현중...
+					System.out.println("게임 점수가 6-6이므로 타이브레이크를 시작합니다.");
+					playTieBreak(team1GameScore, team2GameScore);
+					team1PointScore = 0;
+					team2PointScore = 0;
+					team1GameScore = 0;
+					team2GameScore = 0;
+					break; // 타이브레이크 후 게임 종료
+				} else if (team1GameScore == 6) {
+					team1SetScore++;  // 팀1이 세트 점수 1점 획득
+					System.out.println("팀1이 세트 승리! 세트 점수: " + team1SetScore + " - " + team2SetScore);
+					break;
+				} else if (team2GameScore == 6) {
+					team2SetScore++;  // 팀2가 세트 점수 1점 획득
+					System.out.println("팀2가 세트 승리! 세트 점수: " + team1SetScore + " - " + team2SetScore);
+					break;
+				}
 				// 포인트 점수 초기화
 				team1PointScore = 0;
 				team2PointScore = 0;
 			} // while - GameScore
-			// 듀스 처리
-			if (team1GameScore == 5 && team2GameScore == 5) {
-				System.out.println("듀스 상태입니다.");
-			} // -> GameScore while문 밖에 있음. GameScore는 6에서 나오기에 5:5 과정에서는 이 코드를 실행하지 않음
-
-			// 듀스 상태에서 어드밴티지 처리 -> GameScore while문 밖에 있기때문에 GameScore가 6인 경우에만 결과를 띄움, 7은 띄우지 않음
-			// 							 GameScore에 대한 while문 조건식을 바꿔서 진행해야할듯
-			if (team1GameScore == 6 && team2GameScore == 5) {
-				System.out.println("팀1이 어드밴티지!");
-			} else if (team2GameScore == 6 && team1GameScore == 5) {
-				System.out.println("팀2가 어드밴티지!");
-			} else if(team1GameScore == 7 && team2GameScore == 5) {
-				team1SetScore++;  // 팀1이 세트 점수 1점 획득
-				System.out.println("팀1이 세트 승리! 세트 점수: " + team1SetScore + " - " + team2SetScore);
-			} else if(team2GameScore == 7 && team1GameScore == 5) {
-				team2SetScore++;  // 팀2이 세트 점수 1점 획득
-				System.out.println("팀2이 세트 승리! 세트 점수: " + team1SetScore + " - " + team2SetScore);
-			} 
-
-			// 게임 점수 처리 (각 팀은 게임 점수 6점 먼저 달성해야 함)
-			if (team1GameScore == 6 && team2GameScore == 6) {
-				// 타이브레이크 시작
-				System.out.println("게임 점수가 6-6이므로 타이브레이크를 시작합니다.");
-				playTieBreak();
-				return; // 타이브레이크 후 게임 종료
-			} else if (team1GameScore == 6) {
-				team1SetScore++;  // 팀1이 세트 점수 1점 획득
-				System.out.println("팀1이 세트 승리! 세트 점수: " + team1SetScore + " - " + team2SetScore);
-			} else if (team2GameScore == 6) {
-				team2SetScore++;  // 팀2가 세트 점수 1점 획득
-				System.out.println("팀2가 세트 승리! 세트 점수: " + team1SetScore + " - " + team2SetScore);
-			}
 
 			// 게임 점수 초기화
 			team1GameScore = 0;
@@ -150,33 +170,32 @@ class Game {
 		}
 	} // playGame()
 
-	private void playTieBreak() {
+	private void playTieBreak(int team1GameScore, int team2GameScore) {
 		Random rnd = new Random();
-		int team1TieBreakScore = 0;
-		int team2TieBreakScore = 0;
 
 		// 타이브레이크는 7점을 먼저 얻고 2점 차이로 이겨야 한다. -> 7점을 얻으면 종료 1점차이로 이겨야함, 6:6에서 먼저 이기는팀이 세트점수 따냄
 		//												  조건문 수정해야함
-		while (team1TieBreakScore < 7 && team2TieBreakScore < 7) {
-			int pointWinner = rnd.nextInt(2) + 1;  // 1 또는 2가 랜덤으로 나옴
-
+		while (team1GameScore < 7 && team2GameScore < 7) {
+			int pointWinner = rnd.nextInt(2) + 1;
+			
 			if (pointWinner == 1) {
-				team1TieBreakScore++;  // 팀1이 타이브레이크 점수 획득
+				team1GameScore++;  // 팀1이 타이브레이크 점수 획득
 			} else {
-				team2TieBreakScore++;  // 팀2가 타이브레이크 점수 획득
+				team2GameScore++;  // 팀2가 타이브레이크 점수 획득
 			}
 
-			displayTieBreakScore(team1TieBreakScore, team2TieBreakScore);
-		}
+			displayTieBreakScore(team1GameScore, team2GameScore);
+		} // while
 
 		// 타이브레이크 승자 결정
-		if (team1TieBreakScore >= 7 && (team1TieBreakScore - team2TieBreakScore) >= 2) {
+		if (team1GameScore == 7 ) {
 			team1SetScore++;  // 팀1이 세트 승리
 			System.out.println("팀1이 타이브레이크 승리! 세트 점수: " + team1SetScore + " - " + team2SetScore);
-		} else {
+		} else if(team2GameScore == 7){
 			team2SetScore++;  // 팀2가 세트 승리
 			System.out.println("팀2가 타이브레이크 승리! 세트 점수: " + team1SetScore + " - " + team2SetScore);
 		}
+		
 	}
 
 	private void displayScoreBoard() {
