@@ -1,6 +1,8 @@
-package tennisProject;
+   package tennisProject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -51,6 +53,8 @@ class Game {
 	private Team team2; // 게임에서 선택하는 선수를 담을 팀2
 	private int team1PointScore; // 팀1의 포인트 점수
 	private int team2PointScore; // 팀2의 포인트 점수
+	private int team1PointDeuceCount; // 팀1의 포인트듀스 카운트
+	private int team2PointDeuceCount; // 팀2의 포인트듀스 카운트
 	private int team1GameScore; // 팀1의 게임 점수
 	private int team2GameScore; // 팀2의 게임 점수
 	private int team1SetScore; // 팀1의 세트 점수
@@ -61,6 +65,8 @@ class Game {
 		this.team2 = new Team();
 		this.team1PointScore = 0;
 		this.team2PointScore = 0;
+		this.team1PointDeuceCount = 0;
+		this.team2PointDeuceCount = 0;
 		this.team1GameScore = 0;
 		this.team2GameScore = 0;
 		this.team1SetScore = 0;
@@ -80,19 +86,25 @@ class Game {
 			// 게임 점수를 얻을 때까지 반복
 			while (team1GameScore < 7 && team2GameScore < 7) {
 				// 포인트 점수
-				while (team1PointScore < 4 && team2PointScore < 4) { // 포인트 듀스는 아직 구현 안함
+				while (team1PointScore < 5 && team2PointScore < 5) { // 포인트 듀스는 아직 구현 안함, 여기에 포인트 듀스 기능 구현하기
 					int pointWinner = rnd.nextInt(2) + 1;  // 1 또는 2가 랜덤으로 나옴
 
-					if (pointWinner == 1) {
+					if (pointWinner == 1) { 
 						team1PointScore++;  // 팀1이 포인트 획득
 					} else {
 						team2PointScore++;  // 팀2가 포인트 획득
 					}
 
-					displayScoreBoard();
+					if (team1PointScore==3 && team2PointScore==3) {
+						System.out.println("포인트 듀스 상황입니다.");
+					} // if
+					
+					displayScoreBoard(team1PointScore,team2PointScore);
+					
+						
 				} // while - PointScore
 
-				// 게임 점수 처리
+				// 게임 점수 처리 (PointScore while문에 넣어서 break;로 빠져나가게할것)
 				if (team1PointScore == 4) {
 					team1GameScore++;  // 팀1이 게임 점수 획득
 					System.out.println("팀1 게임 승리! 게임 점수: " + team1GameScore + " - " + team2GameScore);
@@ -198,9 +210,19 @@ class Game {
 		
 	}
 
-	private void displayScoreBoard() {
+	private void displayScoreBoard(int team1PointScore, int team2PointScore) {
+		
+		Map<Integer, String> teamShowPoint = new HashMap<>();
+		
+		teamShowPoint.put(0, 0+"");
+		teamShowPoint.put(1, 15+"");
+		teamShowPoint.put(2, 30+"");
+		teamShowPoint.put(3, 40+"");
+		teamShowPoint.put(4, "Advantage");
+		
 		System.out.println("현재 포인트 점수:");
-		System.out.println("팀1: " + team1PointScore + " | 팀2: " + team2PointScore);
+		
+		System.out.println("팀1: " + teamShowPoint.get(team1PointScore) + " | 팀2: " + teamShowPoint.get(team2PointScore));
 	}
 
 	private void displayTieBreakScore(int team1Score, int team2Score) {
