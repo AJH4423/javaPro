@@ -1,4 +1,4 @@
-   package tennisProject;
+package tennisProject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,8 +53,6 @@ class Game {
 	private Team team2; // 게임에서 선택하는 선수를 담을 팀2
 	private int team1PointScore; // 팀1의 포인트 점수
 	private int team2PointScore; // 팀2의 포인트 점수
-	private int team1PointDeuceCount; // 팀1의 포인트듀스 카운트
-	private int team2PointDeuceCount; // 팀2의 포인트듀스 카운트
 	private int team1GameScore; // 팀1의 게임 점수
 	private int team2GameScore; // 팀2의 게임 점수
 	private int team1SetScore; // 팀1의 세트 점수
@@ -65,8 +63,6 @@ class Game {
 		this.team2 = new Team();
 		this.team1PointScore = 0;
 		this.team2PointScore = 0;
-		this.team1PointDeuceCount = 0;
-		this.team2PointDeuceCount = 0;
 		this.team1GameScore = 0;
 		this.team2GameScore = 0;
 		this.team1SetScore = 0;
@@ -86,7 +82,7 @@ class Game {
 			// 게임 점수를 얻을 때까지 반복
 			while (team1GameScore < 7 && team2GameScore < 7) {
 				// 포인트 점수
-				while (team1PointScore < 5 && team2PointScore < 5) { // 포인트 듀스는 아직 구현 안함, 여기에 포인트 듀스 기능 구현하기
+				while (team1PointScore < 5 && team2PointScore < 5) {
 					int pointWinner = rnd.nextInt(2) + 1;  // 1 또는 2가 랜덤으로 나옴
 
 					if (pointWinner == 1) { 
@@ -95,59 +91,121 @@ class Game {
 						team2PointScore++;  // 팀2가 포인트 획득
 					}
 
-					if (team1PointScore==3 && team2PointScore==3) {
+					if (team1PointScore>=3 && team2PointScore>=3 && team1PointScore-team2PointScore==0) {
+						team1PointScore=3;
+						team2PointScore=3;
+						displayScoreBoard(team1PointScore,team2PointScore);
+						System.out.println("-".repeat(60));
 						System.out.println("포인트 듀스 상황입니다.");
+						System.out.println("-".repeat(60));
+						continue;
 					} // if
-					
-					displayScoreBoard(team1PointScore,team2PointScore);
-					
-						
+
+					if (team1PointScore>=3 && team2PointScore>=3 && team1PointScore-team2PointScore==1) {
+						team1PointScore = 4;
+						team2PointScore = 3;
+						displayScoreBoard(team1PointScore, team2PointScore);
+						continue;
+					}
+					else if (team1PointScore>=3 && team2PointScore>=3 && team2PointScore-team1PointScore==1) {
+						team1PointScore = 3;
+						team2PointScore = 4;
+						displayScoreBoard(team1PointScore, team2PointScore);
+						continue;
+					}
+
+					if (team1PointScore>=3 && team2PointScore>=3 && team1PointScore-team2PointScore==2) {
+						team1PointScore = 5;
+						team2PointScore = 3;
+						displayScoreBoard(team1PointScore, team2PointScore);
+						team1GameScore++;  // 팀1이 게임 점수 획득
+						System.out.println("-".repeat(60));
+						System.out.println("팀1 게임 승리! 게임 점수: " + team1GameScore + " - " + team2GameScore);
+						team1PointScore = 0;
+						team2PointScore = 0;
+						break;
+					}
+					else if (team1PointScore>=3 && team2PointScore>=3 && team2PointScore-team1PointScore==2) {
+						team1PointScore = 3;
+						team2PointScore = 5;
+						displayScoreBoard(team1PointScore, team2PointScore);
+						team2GameScore++;  // 팀1이 게임 점수 획득
+						System.out.println("-".repeat(60));
+						System.out.println("팀2 게임 승리! 게임 점수: " + team1GameScore + " - " + team2GameScore);
+						team1PointScore = 0;
+						team2PointScore = 0;
+						break;
+					}
+
+					// 포인트 듀스아닌 게임 점수 처리 
+					if (team1PointScore == 4) {
+						team1PointScore = 5;
+						displayScoreBoard(team1PointScore, team2PointScore);
+						team1GameScore++;  // 팀1이 게임 점수 획득
+						System.out.println("-".repeat(60));
+						System.out.println("팀1 게임 승리! 게임 점수: " + team1GameScore + " - " + team2GameScore);
+						team1PointScore = 0;
+						team2PointScore = 0;
+						break;
+					} else if (team2PointScore == 4) {
+						team2PointScore = 5;
+						displayScoreBoard(team1PointScore, team2PointScore);
+						team2GameScore++;  // 팀2가 게임 점수 획득
+						System.out.println("-".repeat(60));
+						System.out.println("팀2 게임 승리! 게임 점수: " + team1GameScore + " - " + team2GameScore);
+						team1PointScore = 0;
+						team2PointScore = 0;
+						break;
+					}
+
+					displayScoreBoard(team1PointScore, team2PointScore);
+
 				} // while - PointScore
 
-				// 게임 점수 처리 (PointScore while문에 넣어서 break;로 빠져나가게할것)
-				if (team1PointScore == 4) {
-					team1GameScore++;  // 팀1이 게임 점수 획득
-					System.out.println("팀1 게임 승리! 게임 점수: " + team1GameScore + " - " + team2GameScore);
-				} else if (team2PointScore == 4) {
-					team2GameScore++;  // 팀2가 게임 점수 획득
-					System.out.println("팀2 게임 승리! 게임 점수: " + team1GameScore + " - " + team2GameScore);
-				}
-				
 				// 듀스 처리
 				if (team1GameScore == 5 && team2GameScore == 5) {
+					System.out.println("-".repeat(60));
 					System.out.println("듀스 상태입니다.");
+					System.out.println("-".repeat(60));
 				} 
-				
+
 				// 듀스 상태에서 어드밴티지 처리
 				if (team1GameScore == 6 && team2GameScore == 5) {
+					System.out.println("-".repeat(60));
 					System.out.println("팀1이 어드밴티지!");
 					team1PointScore = 0;
 					team2PointScore = 0;
 					continue;
 				} else if (team2GameScore == 6 && team1GameScore == 5) {
+					System.out.println("-".repeat(60));
 					System.out.println("팀2가 어드밴티지!");
 					team1PointScore = 0;
 					team2PointScore = 0;
 					continue;
 				} else if(team1GameScore == 7 && team2GameScore == 5) {
 					team1SetScore++;  // 팀1이 세트 점수 1점 획득
+					System.out.println("-".repeat(60));
 					System.out.println("팀1이 세트 승리! 세트 점수: " + team1SetScore + " - " + team2SetScore);
+
 					// 포인트 점수 초기화
 					team1PointScore = 0;
 					team2PointScore = 0;
 					break;
 				} else if(team2GameScore == 7 && team1GameScore == 5) {
 					team2SetScore++;  // 팀2이 세트 점수 1점 획득
+					System.out.println("-".repeat(60));
 					System.out.println("팀2이 세트 승리! 세트 점수: " + team1SetScore + " - " + team2SetScore);
+
 					// 포인트 점수 초기화
 					team1PointScore = 0;
 					team2PointScore = 0;
 					break;
 				} 
-				
+
 				// 게임 점수 처리 (각 팀은 게임 점수 6점 먼저 달성해야 함)
 				if (team1GameScore == 6 && team2GameScore == 6) {
-					// 타이브레이크 시작 -> 구현중...
+					// 타이브레이크 
+					System.out.println("-".repeat(60));
 					System.out.println("게임 점수가 6-6이므로 타이브레이크를 시작합니다.");
 					playTieBreak(team1GameScore, team2GameScore);
 					team1PointScore = 0;
@@ -157,10 +215,12 @@ class Game {
 					break; // 타이브레이크 후 게임 종료
 				} else if (team1GameScore == 6) {
 					team1SetScore++;  // 팀1이 세트 점수 1점 획득
+					System.out.println("-".repeat(60));
 					System.out.println("팀1이 세트 승리! 세트 점수: " + team1SetScore + " - " + team2SetScore);
 					break;
 				} else if (team2GameScore == 6) {
 					team2SetScore++;  // 팀2가 세트 점수 1점 획득
+					System.out.println("-".repeat(60));
 					System.out.println("팀2가 세트 승리! 세트 점수: " + team1SetScore + " - " + team2SetScore);
 					break;
 				}
@@ -176,9 +236,13 @@ class Game {
 
 		// 최종 승리팀 출력
 		if (team1SetScore == 3) {
+			System.out.println("=".repeat(60));
 			System.out.println("팀1이 최종 승리!");
+			System.out.println("=".repeat(60));
 		} else {
+			System.out.println("=".repeat(60));
 			System.out.println("팀2가 최종 승리!");
+			System.out.println("=".repeat(60));
 		}
 	} // playGame()
 
@@ -189,7 +253,7 @@ class Game {
 		//												  조건문 수정해야함
 		while (team1GameScore < 7 && team2GameScore < 7) {
 			int pointWinner = rnd.nextInt(2) + 1;
-			
+
 			if (pointWinner == 1) {
 				team1GameScore++;  // 팀1이 타이브레이크 점수 획득
 			} else {
@@ -202,26 +266,32 @@ class Game {
 		// 타이브레이크 승자 결정
 		if (team1GameScore == 7 ) {
 			team1SetScore++;  // 팀1이 세트 승리
+			System.out.println("-".repeat(60));
 			System.out.println("팀1이 타이브레이크 승리! 세트 점수: " + team1SetScore + " - " + team2SetScore);
+			System.out.println("-".repeat(60));
 		} else if(team2GameScore == 7){
 			team2SetScore++;  // 팀2가 세트 승리
+			System.out.println("-".repeat(60));
 			System.out.println("팀2가 타이브레이크 승리! 세트 점수: " + team1SetScore + " - " + team2SetScore);
+			System.out.println("-".repeat(60));
 		}
-		
+
 	}
 
 	private void displayScoreBoard(int team1PointScore, int team2PointScore) {
-		
+
 		Map<Integer, String> teamShowPoint = new HashMap<>();
-		
+
 		teamShowPoint.put(0, 0+"");
 		teamShowPoint.put(1, 15+"");
 		teamShowPoint.put(2, 30+"");
 		teamShowPoint.put(3, 40+"");
 		teamShowPoint.put(4, "Advantage");
-		
+		teamShowPoint.put(5, "승리");
+
+		System.out.println("-".repeat(60));
 		System.out.println("현재 포인트 점수:");
-		
+
 		System.out.println("팀1: " + teamShowPoint.get(team1PointScore) + " | 팀2: " + teamShowPoint.get(team2PointScore));
 	}
 
